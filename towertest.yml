@@ -1,0 +1,6 @@
+- name: Ansible Tower Hello World
+  hosts: all
+  tasks:
+    - name: Hello Message
+      debug:
+        msg: "Saying Hello World from Tower!"
