@@ -1,0 +1,35 @@
+---
+- name: Install httpd, open firewall and create index.html
+  hosts: server2
+  vars:
+    firewall_pkg: firewalld
+    web_pkg: httpd
+    web_svc: httpd
+    web_root: /web
+    index_src: ~/files/index.html
+  
+  tasks:
+  - name: Latest version of packages
+    yum:
+      name:
+        - "{{ firewall_pkg }}"
+        - "{{ web_pkg }}"
+      state: latest
+
+  - name: copy index.html
+    copy:
+      src: "{{ index_src }}"
+      dest: "{{ web_root }}"
+      
+  - name: Open port 80
+    firewalld:
+      service: http
+      state: enabled
+      immediate: true
+      permanent: true
+
+  - name: Enable httpd service
+    service:
+      name: "{{ web_svc }}"
+      state: started
+      enabled: yes
